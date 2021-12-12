@@ -1,12 +1,11 @@
-CREATE DATABASE inside24 CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
+CREATE DATABASE insideapp CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
 
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
     login VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    token VARCHAR(256),
     PRIMARY KEY (id),
-    UNIQUE KEY user_name (user_name)
+    UNIQUE KEY login (login)
 ) ENGINE=InnoDB;
 
 CREATE TABLE message (

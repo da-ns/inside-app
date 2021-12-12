@@ -1,7 +1,12 @@
 package lu.dans.inside24.controllers;
 
+import lu.dans.inside24.controllers.errors.UnauthorizedUserError;
+import lu.dans.inside24.controllers.models.Result;
+import lu.dans.inside24.controllers.models.SentMessage;
 import lu.dans.inside24.models.Message;
 import lu.dans.inside24.models.User;
+import lu.dans.inside24.services.JwtService;
+import lu.dans.inside24.services.MessageDto;
 import lu.dans.inside24.services.MessageService;
 import lu.dans.inside24.services.UserService;
 import org.slf4j.Logger;
@@ -17,8 +22,6 @@ import java.util.List;
 @RequestMapping("message")
 @RestController
 public class MessageController {
-    public static final String BEARER = "Bearer ";
-
     private static final Logger LOG = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
@@ -27,44 +30,53 @@ public class MessageController {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    JwtService jwtService;
+
     @PostMapping("/send")
     @ResponseBody
     public ResponseEntity<Result> send(@RequestBody SentMessage sentMessage,
-                                       @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+                                       @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization)
+            throws UnauthorizedUserError {
 
-        String token = authorization != null && authorization.startsWith(BEARER)
-                ? authorization.substring(BEARER.length())
-                : null;
+        if (!jwtService.isValidToken(authorization, sentMessage.getLogin())) {
+            LOG.error("Verification JWT token is fail.");
+            throw new UnauthorizedUserError("Authorization failed.");
+        }
 
-        User user = userService.findUserByLoginAndToken(sentMessage.getLogin(), token);
+        User user = userService.findUserByLogin(sentMessage.getLogin());
 
         if (user != null) {
             sentMessage.setText(sentMessage.getText().trim());
 
             if (sentMessage.getText().isEmpty()) {
-                LOG.info("User {0} sent empty message.", user);
-                return new ResponseEntity<>(new Result("Wrong data. You are sent empty message."),
-                        HttpStatus.BAD_REQUEST);
+                LOG.info("User {} sent empty message.", user);
+                return new ResponseEntity<>(new Result("You are sent empty message."), HttpStatus.BAD_REQUEST);
             }
 
             messageService.createMessage(user, sentMessage.getText());
+            LOG.info("User {} sent new message.", sentMessage.getLogin());
 
             return new ResponseEntity<>(new Result("Success sending."), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(new Result("You are not logged in. <a href='/'>Go to login</a>."), HttpStatus.UNAUTHORIZED);
+        LOG.error("User {} not found.", sentMessage.getLogin());
+        throw new UnauthorizedUserError("User not found.");
     }
 
-    @GetMapping("/history/{login}:{count}")
-    public List<Message> history(@RequestParam(name = "login") String login,
-                          @RequestParam(name = "count") int count,
-                          @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    @GetMapping("/history/{login}/{count}")
+    @ResponseBody
+    public List<MessageDto> history(@PathVariable(name = "login") String login,
+                                    @PathVariable(name = "count") int count,
+                                    @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization)
+            throws UnauthorizedUserError {
 
-        String token = authorization != null && authorization.startsWith(BEARER)
-                ? authorization.substring(BEARER.length())
-                : null;
+        if (!jwtService.isValidToken(authorization, login)) {
+            LOG.error("Verification JWT token is fail.");
+            throw new UnauthorizedUserError("Authorization failed.");
+        }
 
-        User user = userService.findUserByLoginAndToken(login, token);
+        User user = userService.findUserByLogin(login);
         return messageService.getLastUserMessages(user, count);
     }
 }

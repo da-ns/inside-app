@@ -16,15 +16,20 @@ public class MessageService {
     @PersistenceContext
     EntityManager entityManager;
 
-    public List<Message> getLastUserMessages(User user, int count) {
+    public List<MessageDto> getLastUserMessages(User user, int count) {
         Query query = entityManager
                 .createQuery("from Message message " +
                         "where message.user.id = :userId " +
                         "order by message.date desc", Message.class)
-                .setParameter("userId", user)
+                .setParameter("userId", user.getId())
                 .setMaxResults(count);
 
-        return (List<Message>) query.getResultList();
+        List<Message> messages = query.getResultList();
+
+        return messages
+                .stream()
+                .map(message -> new MessageDto(message.getId(), message.getText(), message.getDate()))
+                .toList();
     }
 
     @Transactional

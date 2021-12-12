@@ -1,64 +1,44 @@
 package lu.dans.inside24.services;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lu.dans.inside24.models.User;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 
 @Component
 public class UserService {
 
-    @Value("$(jwt.secret)")
-    String jwtSecret;
-
     @PersistenceContext
     EntityManager entityManager;
 
-    @Transactional
-    public User login(String name, String password) {
-        User user = findUserByNameAndPassword(name, password);
+    @Autowired
+    JwtService jwtService;
+
+    public String login(String login, String password) {
+        User user = findUserByLoginAndPassword(login, password);
 
         if (user != null) {
-            String token = generateToken(name);
-            user.setToken(token);
-            entityManager.persist(user);
-            return user;
+            return jwtService.generateToken(login);
         }
 
         return null;
     }
 
-    public User findUserByLoginAndToken(String login, String token) {
+    public User findUserByLogin(String login) {
         Query query = entityManager
                 .createQuery("from User user " +
-                        "where user.login = :login and user.token = :token ", User.class)
-                .setParameter("login", login)
-                .setParameter("token", token);
+                        "where user.login = :login", User.class)
+                .setParameter("login", login);
 
         return (User) query.getResultList().stream().filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    private String generateToken(String name) {
-        Date date = Date.from(LocalDate.now().plusDays(2).atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        return Jwts.builder()
-                .setSubject(name)
-                .setExpiration(date)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
-
-    private User findUserByNameAndPassword(String login, String password) {
+    private User findUserByLoginAndPassword(String login, String password) {
         Query query = entityManager
                 .createQuery("from User user " +
                         "where user.login = :login and user.password = :password ", User.class)

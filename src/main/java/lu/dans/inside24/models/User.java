@@ -17,14 +17,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "token")
-    private String token;
-
     public User() {}
 
-    public User(String login, String token) {
+    public User(String login) {
         this.login = login;
-        this.token = token;
     }
 
     public Integer getId() {
@@ -51,14 +47,6 @@ public class User {
         this.password = password;
     }
 
-    public String getToken() {
-        return this.token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -79,6 +67,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "Message{id=" + this.id + ", user='" + this.login + "}";
+        return "User{id=" + this.id + ", user='" + this.login + "}";
     }
 }
