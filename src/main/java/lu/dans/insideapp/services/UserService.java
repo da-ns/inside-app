@@ -1,6 +1,6 @@
-package lu.dans.inside24.services;
+package lu.dans.insideapp.services;
 
-import lu.dans.inside24.models.User;
+import lu.dans.insideapp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

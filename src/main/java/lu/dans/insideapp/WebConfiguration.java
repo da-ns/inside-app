@@ -1,4 +1,4 @@
-package lu.dans.inside24;
+package lu.dans.insideapp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

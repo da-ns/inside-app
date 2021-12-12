@@ -1,4 +1,4 @@
-package lu.dans.inside24;
+package lu.dans.insideapp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

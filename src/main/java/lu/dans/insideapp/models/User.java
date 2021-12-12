@@ -1,4 +1,4 @@
-package lu.dans.inside24.models;
+package lu.dans.insideapp.models;
 
 import javax.persistence.*;
 import java.util.Objects;

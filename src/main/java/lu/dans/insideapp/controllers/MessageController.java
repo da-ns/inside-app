@@ -1,14 +1,13 @@
-package lu.dans.inside24.controllers;
+package lu.dans.insideapp.controllers;
 
-import lu.dans.inside24.controllers.errors.UnauthorizedUserError;
-import lu.dans.inside24.controllers.models.Result;
-import lu.dans.inside24.controllers.models.SentMessage;
-import lu.dans.inside24.models.Message;
-import lu.dans.inside24.models.User;
-import lu.dans.inside24.services.JwtService;
-import lu.dans.inside24.services.MessageDto;
-import lu.dans.inside24.services.MessageService;
-import lu.dans.inside24.services.UserService;
+import lu.dans.insideapp.controllers.errors.UnauthorizedUserError;
+import lu.dans.insideapp.controllers.models.Result;
+import lu.dans.insideapp.controllers.models.SentMessage;
+import lu.dans.insideapp.models.User;
+import lu.dans.insideapp.services.JwtService;
+import lu.dans.insideapp.services.MessageDto;
+import lu.dans.insideapp.services.MessageService;
+import lu.dans.insideapp.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,11 @@
-package lu.dans.inside24.controllers;
+package lu.dans.insideapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import lu.dans.inside24.controllers.models.Account;
-import lu.dans.inside24.controllers.models.JWT;
-import lu.dans.inside24.models.User;
-import lu.dans.inside24.services.JwtService;
-import lu.dans.inside24.services.UserService;
+import lu.dans.insideapp.controllers.models.Account;
+import lu.dans.insideapp.controllers.models.JWT;
+import lu.dans.insideapp.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
