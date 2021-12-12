@@ -12,7 +12,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     @ResponseBody
     JWT login(@RequestBody Account account) {
         User user = userService.login(account.getLogin(), account.getPassword());

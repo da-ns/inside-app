@@ -1,7 +1,5 @@
 package lu.dans.inside24.models;
 
-import org.hibernate.annotations.Table;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -10,7 +8,7 @@ import java.util.Objects;
 public class Message {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -21,7 +19,7 @@ public class Message {
     @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private Date date;
 
     public Message() {}

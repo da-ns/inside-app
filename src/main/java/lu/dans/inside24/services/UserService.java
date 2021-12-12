@@ -38,7 +38,7 @@ public class UserService {
         return null;
     }
 
-    public User findUserByNameAndToken(String login, String token) {
+    public User findUserByLoginAndToken(String login, String token) {
         Query query = entityManager
                 .createQuery("from User user " +
                         "where user.login = :login and user.token = :token ", User.class)

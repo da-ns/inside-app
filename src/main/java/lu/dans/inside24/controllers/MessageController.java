@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/message")
+@RequestMapping("message")
 @RestController
 public class MessageController {
     public static final String BEARER = "Bearer ";
@@ -26,26 +28,31 @@ public class MessageController {
     MessageService messageService;
 
     @PostMapping("/send")
-    public String send(@RequestParam(name = "login") String name,
-                  @RequestParam(name = "message") String text,
-                  @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    @ResponseBody
+    public ResponseEntity<Result> send(@RequestBody SentMessage sentMessage,
+                                       @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
 
         String token = authorization != null && authorization.startsWith(BEARER)
                 ? authorization.substring(BEARER.length())
                 : null;
 
-        User user = userService.findUserByNameAndToken(name, token);
+        User user = userService.findUserByLoginAndToken(sentMessage.getLogin(), token);
 
         if (user != null) {
-            if (text.trim().isEmpty()) {
+            sentMessage.setText(sentMessage.getText().trim());
+
+            if (sentMessage.getText().isEmpty()) {
                 LOG.info("User {0} sent empty message.", user);
-                return "Wrong data. You are sent empty message.";
+                return new ResponseEntity<>(new Result("Wrong data. You are sent empty message."),
+                        HttpStatus.BAD_REQUEST);
             }
 
-            messageService.createMessage(user, text);
+            messageService.createMessage(user, sentMessage.getText());
+
+            return new ResponseEntity<>(new Result("Success sending."), HttpStatus.OK);
         }
 
-        return "Success.";
+        return new ResponseEntity<>(new Result("You are not logged in. <a href='/'>Go to login</a>."), HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/history/{login}:{count}")
@@ -57,7 +64,7 @@ public class MessageController {
                 ? authorization.substring(BEARER.length())
                 : null;
 
-        User user = userService.findUserByNameAndToken(login, token);
+        User user = userService.findUserByLoginAndToken(login, token);
         return messageService.getLastUserMessages(user, count);
     }
 }
