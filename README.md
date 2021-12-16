@@ -14,6 +14,7 @@ cd inside-app
 
 Выполнить сборку приложения:
 ```
+mvn -N io.takari:maven:wrapper
 mvnw clean install
 ```
 
