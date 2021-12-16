@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 
-@EntityScan(basePackages = {"lu.dans.inside24.models"})
-@ComponentScan(basePackages = {"lu.dans.inside24.services", "lu.dans.inside24.controllers"})
+@EntityScan(basePackages = {"lu.dans.insideapp.models"})
+@ComponentScan(basePackages = {"lu.dans.insideapp.services", "lu.dans.insideapp.controllers"})
 @SpringBootApplication(exclude = {ErrorMvcAutoConfiguration.class})
 @RestController
-public class Inside24Application {
+public class InsideApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Inside24Application.class, args);
+		SpringApplication.run(InsideApplication.class, args);
 	}
 
 	@RequestMapping("/")

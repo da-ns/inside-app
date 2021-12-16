@@ -1,2 +1,2 @@
 # inside-app
-Application for Inside
+Application for Insid

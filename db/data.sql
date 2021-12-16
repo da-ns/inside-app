@@ -1,0 +1,1 @@
+insert into user (login, password) values ('panda', 'bamboo');

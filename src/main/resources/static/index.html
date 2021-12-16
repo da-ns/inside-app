@@ -46,6 +46,7 @@
 
         function logout() {
             $.removeCookie("jwt");
+            document.location.reload();
         }
 
         function sendMessage() {
@@ -59,8 +60,14 @@
                 return;
             }
 
-            var decodedToken = jwt_decode(token);
-            console.log(decodedToken);
+            var decodedToken;
+
+            try {
+                decodedToken = jwt_decode(token);
+            } catch (error) {
+                console.log(error);
+                logout();
+            }
 
             var data = JSON.stringify({
                 login: decodedToken.login,
@@ -100,7 +107,14 @@
                 return;
             }
 
-            var decodedToken = jwt_decode(token);
+            var decodedToken;
+
+            try {
+                decodedToken = jwt_decode(token);
+            } catch (error) {
+                console.log(error);
+                logout();
+            }
 
             $.ajax({
                 type: "GET",

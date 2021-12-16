@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  mysql:
+    image: "mysql:5.7"
+    hostname: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: inside
+      MYSQL_USER: app
+      MYSQL_PASSWORD: 12345
+    volumes:
+      - "./db/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./db/data.sql:/docker-entrypoint-initdb.d/2.sql"
+
+  java:
+    build: .
+    restart: on-failure
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql

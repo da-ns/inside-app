@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>lu.dans</groupId>
-    <artifactId>inside24</artifactId>
+    <artifactId>inside-app</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>inside24</name>
+    <name>inside-app</name>
 
     <description>Test project for Inside24</description>
 
@@ -60,18 +60,6 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf</artifactId>
-            <version>3.0.11.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-            <version>3.0.11.RELEASE</version>
         </dependency>
     </dependencies>
 

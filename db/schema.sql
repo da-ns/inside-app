@@ -1,4 +1,4 @@
-CREATE DATABASE insideapp CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
+USE inside;
 
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
@@ -16,5 +16,3 @@ CREATE TABLE message (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
-insert into user (login, password) values ('panda', 'bamboo');
