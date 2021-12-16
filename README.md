@@ -1,15 +1,49 @@
-#Application for Inside
+# Тестовое задание для Inside
 
-##Installation
+## Установка
 
-git clone .
-mvnw clean instal
+Клонировать репозиторий:
+```
+git clone https://github.com/da-ns/inside-app.git
+```
+
+Перейти в корень проекта:
+```
+cd inside-app
+```
+
+Выполнить сборку приложения:
+```
+mvnw clean install
+```
+
+Запустить докер:
+```
 docker-compose up --build
+```
 
-##REST API
+Приложение станет доступно по адресу: http://localhost:8080.
+
+Настройки доступа к БД:
+
+```
+database=inside
+server=localhost
+port=3306
+username=app
+password=12345
+```
+
+Для работы с приложением в БД внесен один пользователь. Данные его аккаунта:
+```
+login=panda
+password=bamboo
+```
+
+## REST API
 
 **GET /**<br>
-Static page. UI.
+Пользовательский интерфейс для работы с приложением.
 
 **POST /user/login**<br>
 Request JSON {*login*: string, *password*: string}<br>
